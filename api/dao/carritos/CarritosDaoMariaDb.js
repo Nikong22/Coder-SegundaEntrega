@@ -69,43 +69,34 @@ let CarritosDaoMariaDb = class CarritosDaoMariaDb {
     nuevoProducto = async (req, res) => {
         const { id_carrito } = req.params;
         const { id_producto } = req.params;
-        //Busco y obtengo el producto
         const producto = await knex.from('productos').select('*').where('id', '=', id_producto).first()
             .then((producto) => {
                 return producto
             })
-        //Si se encontro el producto, busco al carrito y agrego este producto en el carrito
         if (producto) {
-            //Busco el carrito
             const carrito = await knex.from('carritos').select('*').where('id', '=', id_carrito).first()
                 .then((carrito) => {
                     return carrito
                 })
-            //Si se encontro el carrito:
             if (carrito) {
-                //Obtengo los productos del carrito (es un JSON) y lo convierto a un array
                 let productos = JSON.parse(carrito.productos)
-                //Agrego el producto en el array de productos
                 productos.push(producto)
-                //Convierto el array a JSON y lo vuelvo a poner en carritos para luego hacer update
                 carrito.productos = JSON.stringify(productos)
-                //Hago update del carrito:
                 const updated = await knex.from('carritos').where('id', '=', id_carrito).update(({
                     productos: carrito.productos
                 }))
                     .then((updated) => {
                         return updated
                     })
-                //Si se pudo modificar devuelvo el carrito
                 if (updated) {
                     return carrito
-                } else {//Si no se pudo modificar (algun error), devuelvo null
+                } else {
                     return null
                 }
-            } else {//Si no se encontro el carrito, return null
+            } else {
                 return null
             }
-        } else {//Si no se encontro el producto, return null
+        } else {
             return null
         }
     }
@@ -113,44 +104,35 @@ let CarritosDaoMariaDb = class CarritosDaoMariaDb {
     borrarProducto = async (req, res) => {
         const { id_carrito } = req.params;
         const { id_producto } = req.params;
-        //Busco y obtengo el producto
         const producto = await knex.from('productos').select('*').where('id', '=', id_producto).first()
             .then((producto) => {
                 return producto
             })
-        //Si se encontro el producto, busco al carrito y agrego este producto en el carrito
         if (producto) {
-            //Busco el carrito
             const carrito = await knex.from('carritos').select('*').where('id', '=', id_carrito).first()
                 .then((carrito) => {
                     return carrito
                 })
-            //Si se encontro el carrito:
             if (carrito) {
-                //Obtengo los productos del carrito (es un JSON) y lo convierto a un array
                 let productos = JSON.parse(carrito.productos)
-                //Agrego el producto en el array de productos
                 const index = productos.findIndex((producto) => producto.id == id_producto);
                 productos.splice(index, 1);
-                //Convierto el array a JSON y lo vuelvo a poner en carritos para luego hacer update
                 carrito.productos = JSON.stringify(productos)
-                //Hago update del carrito:
                 const updated = await knex.from('carritos').where('id', '=', id_carrito).update(({
                     productos: carrito.productos
                 }))
                     .then((updated) => {
                         return updated
                     })
-                //Si se pudo modificar devuelvo el carrito
                 if (updated) {
                     return carrito
-                } else {//Si no se pudo modificar (algun error), devuelvo null
+                } else {
                     return null
                 }
-            } else {//Si no se encontro el carrito, return null
+            } else {
                 return null
             }
-        } else {//Si no se encontro el producto, return null
+        } else {
             return null
         }
 

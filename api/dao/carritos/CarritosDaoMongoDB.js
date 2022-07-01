@@ -73,16 +73,15 @@ let CarritosDaoMongoDB = class CarritosDaoMongoDB {
           .then((updated) => {
             return updated
           })
-        //Si se pudo modificar devuelvo el carrito
         if (updated) {
           return carrito
-        } else {//Si no se pudo modificar (algun error), devuelvo null
+        } else {
           return null
         }
-      } else {//Si no se encontro el carrito, return null
+      } else {
         return null
       }
-    } else {//Si no se encontro el producto, return null
+    } else {
       return null
     }
   }
@@ -118,13 +117,13 @@ let CarritosDaoMongoDB = class CarritosDaoMongoDB {
           })
         if (updated) {
           return carrito
-        } else {//Si no se pudo modificar (algun error), devuelvo null
+        } else {
           return null
         }
-      } else {//Si no se encontro el carrito, return null
+      } else {
         return null
       }
-    } else {//Si no se encontro el producto, return null
+    } else {
       return null
     }
   }

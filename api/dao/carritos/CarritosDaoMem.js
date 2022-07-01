@@ -11,18 +11,9 @@ class Funciones {
         });
         return ++ultimoId;
     };
-    // inicializar = (carritos) => {
-    //     let id = 1
-    //     carritos.forEach((carrito) => {
-    //         if (!carrito.id) {
-    //             carrito.id = id++
-    //         }
-    //     });
-    // }
 }
 
 const funciones = new Funciones();
-// funciones.inicializar(carrito)
 
 let CarritoDaoMem = class CarritoDaoMem {
 

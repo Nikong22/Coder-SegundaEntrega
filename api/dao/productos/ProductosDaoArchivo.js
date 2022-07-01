@@ -10,14 +10,6 @@ class Funciones {
     });
     return ++ultimoId;
   };
-  // inicializar = (productos) => {
-  //   let id = 1
-  //   productos.forEach((producto) => {
-  //     if (!producto.id) {
-  //       producto.id = id++
-  //     }
-  //   });
-  // }
 }
 const funciones = new Funciones();
 
