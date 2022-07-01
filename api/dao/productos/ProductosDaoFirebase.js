@@ -3,6 +3,19 @@ var admin = require("firebase-admin");
 
 const db = admin.firestore();
 
+class Funciones {
+    getSiguienteId = (productos) => {
+        let ultimoId = 0;
+        productos.forEach((producto) => {
+            if (producto.id > ultimoId) {
+                ultimoId = producto.id;
+            }
+        });
+        return ++ultimoId;
+    };
+}
+const funciones = new Funciones();
+
 let ProductosDaoFirebase = class ProductosDaoFirebase {
 
     getProductos = async (req, res) => {
@@ -10,7 +23,6 @@ let ProductosDaoFirebase = class ProductosDaoFirebase {
             let query = db.collection("productos");
             const querySnapshot = await query.get();
             let docs = querySnapshot.docs;
-
             const response = docs.map((doc) => ({
                 id: doc.id,
                 name: doc.data().name,
@@ -23,7 +35,7 @@ let ProductosDaoFirebase = class ProductosDaoFirebase {
             return response
 
         } catch (error) {
-            // return res.json(error);
+            console.log(error);
         }
         return response
     }
@@ -35,16 +47,29 @@ let ProductosDaoFirebase = class ProductosDaoFirebase {
             const response = item.data();
             return response;
         } catch (error) {
-            // return res.send(error);
+            console.log(error);
         }
         return response
     }
 
     nuevoProducto = async (req, res) => {
         try {
+            let query = db.collection("productos");
+            const querySnapshot = await query.get();
+            let docs = querySnapshot.docs;
+            const productos = docs.map((doc) => ({
+                id: doc.id,
+                name: doc.data().name,
+                price: doc.data().price,
+                thumbnail: doc.data().thumbnail,
+                description: doc.data().description,
+                code: doc.data().code,
+                stock: doc.data().stock
+            }));
+
             await db
                 .collection("productos")
-                .doc("/" + req.body.id + "/")
+                .doc("/" + funciones.getSiguienteId(productos) + "/")
                 .create({
                     name: req.body.name,
                     price: req.body.price,
@@ -53,9 +78,9 @@ let ProductosDaoFirebase = class ProductosDaoFirebase {
                     code: req.body.code,
                     stock: req.body.stock
                 });
-            return res.json();
+            return productos
         } catch (error) {
-            // return res.status(500).send(error);
+            console.log(error)
         }
     }
 
@@ -72,7 +97,7 @@ let ProductosDaoFirebase = class ProductosDaoFirebase {
             });
             return document
         } catch (error) {
-            // return res.status(500).json();
+            console.log(error);
         }
         return document
     }
@@ -83,7 +108,7 @@ let ProductosDaoFirebase = class ProductosDaoFirebase {
             await doc.delete();
             return res.json();
         } catch (error) {
-            // return res.send(error);
+            console.log(error);
         }
     }
 }
